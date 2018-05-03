@@ -4,7 +4,7 @@ A simple executable to bootstrap your Linux Terminal session.
 
 ## Why?
 
-Because a lot of Linux tools need to be configured by setting the `PATH` variable or by setting a proxy or by executing an initialization process when a new Terminal login session is opening (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))... and so on.  
+Because a lot of Linux tools need to be configured by setting the `PATH` variable or by setting a proxy or by executing an initialization process when a new Terminal session is opening (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))... and so on.  
 
 ## How does it works?
 
@@ -27,22 +27,22 @@ $ mkdir -p $HOME/.session-bootstrap
 
 ### Boostrap it
 
-Now we want to execute the `session-bootstrap.sh` at any Terminal login. Depending on your Shell, this installation can be done differently.
+Now we want to execute the `session-bootstrap.sh` at any Terminal session opening. Depending on your Shell, this installation can be done differently.
 
 #### Bash
 
 ```bash
-$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.bash_login
+$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.bashrc
 ```
 
 #### Zsh
 
 ```bash
-$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.zlogin
+$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.zshrc
 ```
 
 ## How to add a bootstrap script?
 
-Any file in the `session-bootstrap/` directory will be executed during the Terminal session login. Thus, to add a bootstrap script at the Terminal login, simply place it to the `session-bootstrap/` directory.  
+Any file in the `session-bootstrap/` directory will be executed during the Terminal session opening. Thus, to add a bootstrap script at the Terminal session opening, simply place it to the `session-bootstrap/` directory.  
 
 Some examples of `session-bootstrap`'s files can be found [here](session-bootstrap/).
