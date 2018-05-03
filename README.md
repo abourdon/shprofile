@@ -1,6 +1,6 @@
-# Terminal session startup
+# Terminal session bootstrap
 
-A simple executable to startup your Linux Terminal session.
+A simple executable to bootstrap your Linux Terminal session.
 
 ## Why?
 
@@ -9,40 +9,40 @@ Because a lot of Linux tools need to be configured by setting the `PATH` variabl
 ## How does it works?
 
 This project is composed of two parts:
-- The `session-startup.sh` file
-- The `session-startup/` directory
+- The `session-bootstrap.sh` file
+- The `session-bootstrap/` directory
 
-The `session-startup.sh` file execute any files from its associated `session-startup/` directory. Any `session-startup/`'s file execution is done within the current terminal session.  
+The `session-bootstrap.sh` file execute any files from its associated `session-bootstrap/` directory. Any `session-bootstrap/`'s file execution is done within the current terminal session.  
 
-In addition, `session-startup/`'s file iteration is done in the lexicographical order, letting `session-startup/`'s files executions to be sorted.
+In addition, `session-bootstrap/`'s file iteration is done in the lexicographical order, letting `session-bootstrap/`'s files execution to be sorted.
 
 ## How to use it?
 
 ### Install it
 
 ```bash
-$ curl -o $HOME/.session-startup.sh https://raw.githubusercontent.com/abourdon/terminal-session-startup/master/session-startup.sh
-$ mkdir -p $HOME/.session-startup
+$ curl -o $HOME/.session-bootstrap.sh https://raw.githubusercontent.com/abourdon/terminal-session-bootstrap/master/session-bootstrap.sh
+$ mkdir -p $HOME/.session-bootstrap
 ```
 
 ### Boostrap it
 
-Now we want to execute the `session-startup.sh` at any Terminal login. Depending on your Shell, this installation can be done differently.
+Now we want to execute the `session-bootstrap.sh` at any Terminal login. Depending on your Shell, this installation can be done differently.
 
 #### Bash
 
 ```bash
-$ echo 'source $HOME/.session-startup.sh' >> $HOME/.bash_login
+$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.bash_login
 ```
 
 #### Zsh
 
 ```bash
-$ echo 'source $HOME/.session-startup.sh' >> $HOME/.zlogin
+$ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.zlogin
 ```
 
-## How to add a startup script?
+## How to add a bootstrap script?
 
-Any file in the `session-startup/` directory will be executed during the Terminal session login. Thus, to add a startup script at the Terminal login, simply place it to the `session-startup/` directory.  
+Any file in the `session-bootstrap/` directory will be executed during the Terminal session login. Thus, to add a bootstrap script at the Terminal login, simply place it to the `session-bootstrap/` directory.  
 
-Some examples of `session-startup`'s files can be found [here](./session-startup/).
+Some examples of `session-bootstrap`'s files can be found [here](session-bootstrap/).
