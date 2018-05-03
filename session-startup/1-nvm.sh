@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Common nvm (https://github.com/creationix/nvm) initialization process
+# Example of a simple nvm (https://github.com/creationix/nvm) initialization process
 
 # Adapt to your need
 export NVM_DIR=$HOME/.nvm

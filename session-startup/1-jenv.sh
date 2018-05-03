@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Common jenv (http://www.jenv.be) initialization process
+# Example of a simple jenv (http://www.jenv.be) initialization process
 
 eval "$(jenv init -)"
 

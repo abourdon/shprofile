@@ -4,7 +4,7 @@ A simple executable to startup your Linux Terminal session.
 
 ## Why?
 
-Because a lot of Linux tools need to be configured by setting the `PATH` variable or by executing an initialization process at any Terminal login session (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv)).    
+Because a lot of Linux tools need to be configured by setting the `PATH` variable or by setting a proxy or by executing an initialization process when a new Terminal login session is opening (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))... and so on.  
 
 ## How does it works?
 

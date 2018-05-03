@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Setup the current terminal session by executing scripts under the special $SESSION_STARTUP_DIRECTORY directory.
 #

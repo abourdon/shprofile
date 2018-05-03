@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Common latex (https://www.latex-project.org) initialization process
+# Example of a simple latex (https://www.latex-project.org) initialization process
 
 # Adapt to your need
 export LATEX_PATH=/Library/TeX
