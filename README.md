@@ -6,6 +6,8 @@ A simple executable to bootstrap your Linux Terminal session.
 
 Because a lot of Linux tools need to be configured by setting the `PATH` variable or by setting a proxy or by executing an initialization process when a new Terminal session is opening (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))... and so on.  
 
+![demo.gif](./resources/demo.gif)
+
 ## How does it works?
 
 This project is composed of two parts:
