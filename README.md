@@ -6,7 +6,13 @@ A simple executable to bootstrap your Linux Terminal session.
 
 ## Why?
 
-Because a lot of Linux tools need to be configured by setting the `PATH` variable or by setting a proxy or by executing an initialization process when a new Terminal session is opening (e.g. [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))... and so on.
+Because we all have our own way of managing our Terminal session opening by:
+- Setting the `PATH` variable
+- Setting the proxy
+- Adding aliases
+- Applying a specific initialization process (e.g. for [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))
+- Managing several "Terminal session profiles"
+- ... and so on
 
 ## How does it works?
 
@@ -16,7 +22,11 @@ This project is composed of two parts:
 
 The `session-bootstrap.sh` file execute any files from its associated `session-bootstrap/` directory. Any `session-bootstrap/`'s file execution is done within the current terminal session.  
 
-In addition, `session-bootstrap/`'s file iteration is done in the lexicographical order, letting `session-bootstrap/`'s files execution to be sorted.
+### Available features
+
+- Bootstrap the Terminal session
+- Apply the lexicographically order when discovering bootstrap script files
+- Define the bootstrap script directory to use to manage several "Terminal session profiles"  
 
 ## How to use it?
 
@@ -41,6 +51,12 @@ $ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.bashrc
 
 ```bash
 $ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.zshrc
+```
+
+### Need help?
+
+```bash
+$ ./session-bootstrap.sh --help
 ```
 
 ## How to add a bootstrap script?
