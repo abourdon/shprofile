@@ -10,17 +10,17 @@ Because we all have our own way of managing our Terminal session opening by:
 - Setting the `PATH` variable
 - Setting the proxy
 - Adding aliases
-- Applying a specific initialization process (e.g. for [jenv](http://www.jenv.be/) or [rbenv](https://github.com/rbenv/rbenv))
+- Applying a mandatory initialization process for a particular command line (e.g. for [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
 - Managing several "Terminal session profiles"
 - ... and so on
 
-## How does it works?
+## How?
 
-This project is composed of two parts:
+Terminal session bootstrap is done by using:
 - The `session-bootstrap.sh` file
 - The `session-bootstrap/` directory
 
-The `session-bootstrap.sh` file execute any files from its associated `session-bootstrap/` directory. Any `session-bootstrap/`'s file execution is done within the current terminal session.  
+Any `session-bootstrap/`'s files are then executed by the `session-bootstrap.sh` within the current Terminal session.
 
 ### Available features
 
@@ -28,16 +28,12 @@ The `session-bootstrap.sh` file execute any files from its associated `session-b
 - Apply the lexicographically order when discovering bootstrap script files
 - Define the bootstrap script directory to use to manage several "Terminal session profiles"  
 
-## How to use it?
-
-### Install it
+### Installation
 
 ```bash
 $ curl -o $HOME/.session-bootstrap.sh https://raw.githubusercontent.com/abourdon/terminal-session-bootstrap/master/session-bootstrap.sh
 $ mkdir -p $HOME/.session-bootstrap
 ```
-
-### Boostrap it
 
 Now we want to execute the `session-bootstrap.sh` at any Terminal session opening. Depending on your Shell, this installation can be done differently.
 
