@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Setup the current terminal session by executing scripts under a given bootstrap directory.
+# Bootstrap the current terminal session by executing scripts under a given bootstrap directory.
 #
 # @author Aurelien Bourdon
 
@@ -29,7 +29,6 @@ INVALID_BOOTSTRAP_DIRECTORY=12
 # Display a message by overriding the current Terminal line
 #
 # @param $1 message to display
-# @return nothing
 function dynamicEcho {
     local message="$1"
     echo -en "\r\033[K$message"
@@ -38,7 +37,6 @@ function dynamicEcho {
 # Display help message
 #
 # @param nothing
-# @return nothing
 function help {
     echo "usage: ${APP} [OPTIONS]"
     echo 'OPTIONS:'
@@ -50,7 +48,7 @@ function help {
 # Parse user-given options
 #
 # @param $@ user options
-# @return nothing
+# @return >0 if an error occurred
 function parseOptions {
     while [[ $# -gt 0 ]]; do
         argument="$1"
@@ -83,7 +81,7 @@ function parseOptions {
 # Run the terminal session bootstrap process
 #
 # @param nothing
-# @return nothing
+# @return >0 if an error occurred
 function bootstrap {
     # Check if the bootstrap directory can be used
     if [ ! -d $bootstrapDirectory ] || [ ! -x $bootstrapDirectory ]; then
@@ -108,12 +106,36 @@ function bootstrap {
     dynamicEcho ''
 }
 
+# Clear environment by removing function and variable declarations
+#
+# @param nothing
+function clearEnvironment {
+    # Clear function declarations
+    unset -f dynamicEcho
+    unset -f help
+    unset -f parseOptions
+    unset -f bootstrap
+    unset -f clearEnvironment
+    unset -f main
+
+    # Clear variable declarations
+    unset bootstrapDirectory
+    unset sortedDiscovery
+    unset APP
+    unset HELP_WANTED
+    unset INVALID_OPTION
+    unset INVALID_BOOTSTRAP_DIRECTORY
+}
+
 # Main entry point
 #
 # @param $@ the program arguments
-# @return nothing
+# @return >0 if an error occurred
 function main {
     parseOptions "$@" && bootstrap
+    local isBootstrapSuccessful=$?
+    clearEnvironment
+    return $isBootstrapSuccessful
 }
 
 #################################################

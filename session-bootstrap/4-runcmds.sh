@@ -3,6 +3,6 @@
 # Example of a simple runcmds (https://github.com/abourdon/runcmds) initialization process
 
 # Adapt to your need
-RUNCMDS_BIN=/Users/aurel/Work/perso/runcmds
+export RUNCMDS_HOME=/Users/aurel/Work/perso/runcmds
 
-export PATH=$RUNCMDS_BIN:$PATH
+export PATH=$RUNCMDS_HOME:$PATH
