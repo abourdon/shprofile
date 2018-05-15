@@ -10,6 +10,7 @@ Because we all have our own way of managing our Terminal session opening by:
 - Setting the `PATH` variable
 - Setting the proxy
 - Adding aliases
+- Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
 - Applying a mandatory initialization process for a particular command line (e.g. for [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
 - Managing several "Terminal session profiles"
 - ... and so on

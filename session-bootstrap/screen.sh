@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Example of a simple screen (https://ss64.com/bash/screen.html) initialization process
+# Example of a simple screen (https://www.gnu.org/software/screen/) initialization process
 
 # Define the .screenrc content (Adapt to your need)
 cat > $HOME/.screenrc << EOL

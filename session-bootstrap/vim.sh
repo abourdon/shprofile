@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Example of a simple vim (http://www.delafond.org/traducmanfr/man/man1/vim.1.html) initialization process
+# Example of a simple vim (https://www.vim.org/) initialization process
 
 # Define the .vimrc content (Adapt to your need)
 cat > $HOME/.vimrc << EOL
