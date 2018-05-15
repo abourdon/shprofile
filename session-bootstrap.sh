@@ -51,7 +51,7 @@ function help {
 # @return >0 if an error occurred
 function parseOptions {
     while [[ $# -gt 0 ]]; do
-        argument="$1"
+        local argument="$1"
         case $argument in
             -h|--help)
                 help
