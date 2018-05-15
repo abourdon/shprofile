@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Example of a simple anaconda (https://anaconda.org/anaconda/python) initialization process.
+# Example of a simple anaconda (https://anaconda.org/anaconda/python) initialization process
 
 # Adapt to your need
 export ANACONDA_HOME=/usr/local/anaconda3
