@@ -1,50 +1,56 @@
 # Terminal session bootstrap
 
-A simple executable to bootstrap your Linux Terminal session.
+A simple executable to bootstrap your Linux terminal session.
 
 ![demo.gif](./resources/demo.gif)
 
 ## Why?
 
-Because we all have our own way of managing our Terminal session opening by:
+Because we all have our own way of managing our terminal session opening by:
 - Setting the `PATH` variable
 - Setting the proxy
 - Adding aliases
 - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
 - Applying a mandatory initialization process for a particular command line (e.g. for [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
-- Managing several "Terminal session profiles"
-- ... and so on
+- Managing several terminal session profiles
+- ... _and so on_ 
 
 ## How?
+
+The [terminal-session-bootstrap](https://github.com/abourdon/terminal-session-bootstrap) project then tries to define a common way to set your terminal session opening, regardless of your shell type.
 
 Terminal session bootstrap is done by using:
 - The `session-bootstrap.sh` file
 - The `session-bootstrap/` directory
 
-Any `session-bootstrap/`'s files are then executed by the `session-bootstrap.sh` within the current Terminal session.
+Any `session-bootstrap/`'s files are then executed by the `session-bootstrap.sh` within the current terminal session.
 
 ### Available features
 
-- Bootstrap the Terminal session
-- Apply the lexicographically order when discovering bootstrap script files
-- Define the bootstrap script directory to use to manage several "Terminal session profiles"  
+- **Bootstrap the terminal session**
+- Apply the **lexicographically order** when discovering bootstrap script files
+- Define the bootstrap script directory to use to **manage several terminal session profiles**  
 
 ### Installation
+
+#### Download it
 
 ```bash
 $ curl -o $HOME/.session-bootstrap.sh https://raw.githubusercontent.com/abourdon/terminal-session-bootstrap/master/session-bootstrap.sh
 $ mkdir -p $HOME/.session-bootstrap
 ```
 
-Now we want to execute the `session-bootstrap.sh` at any Terminal session opening. Depending on your Shell, this installation can be done differently.
+#### Enable it
 
-#### Bash
+Now we want to execute the `session-bootstrap.sh` at any terminal session opening. Depending on your shell, this installation can be done differently.
+
+##### Bash
 
 ```bash
 $ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.bashrc
 ```
 
-#### Zsh
+##### Zsh
 
 ```bash
 $ echo 'source $HOME/.session-bootstrap.sh' >> $HOME/.zshrc
@@ -58,6 +64,6 @@ $ ./session-bootstrap.sh --help
 
 ## How to add a bootstrap script?
 
-Any file in the `session-bootstrap/` directory will be executed during the Terminal session opening. Thus, to add a bootstrap script at the Terminal session opening, simply place it to the `session-bootstrap/` directory.  
+Any file in the `session-bootstrap/` directory will be executed during the terminal session opening. Thus, to add a bootstrap script at the terminal session opening, simply place it to the `session-bootstrap/` directory.  
 
 Some examples of `session-bootstrap`'s files can be found [here](session-bootstrap/).
