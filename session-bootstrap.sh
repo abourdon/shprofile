@@ -8,29 +8,60 @@
 # Internal variables                            #
 #################################################
 
-# The directory from which bootstrap script files will be executed
-bootstrapDirectory=$HOME/.session-bootstrap
-
-# If the discovery of bootstrap script files has to be done in the lexicography order or not
-sortedDiscovery=true
-
 # Application name
 APP=`basename $0`
+
+# Log levels
+INFO='INFO'
+ERROR='ERROR'
 
 # Error codes
 HELP_WANTED=10
 INVALID_OPTION=11
 INVALID_BOOTSTRAP_DIRECTORY=12
 
+# The directory from which bootstrap script files will be executed
+bootstrapDirectory=$HOME/.session-bootstrap
+
+# If the discovery of bootstrap script files has to be done in the lexicography order or not
+isSortedDiscovery=true
+
+# If informational messages have to be displayed
+isInformationMessagesDisplayed=true
+
 #################################################
 # Internal functions                            #
 #################################################
 
-# Display a message by overriding the current Terminal line
+# Display a message to the terminal
+#
+# @param $1 the log level to use
+# @param $2 the message to display
+function log {
+    local level="$1"
+    if [ $level = $INFO -a $isInformationMessagesDisplayed = false ]; then
+        return 0
+    fi
+    local message="$2"
+    echo "$APP: [$level] $message"
+}
+
+# Display an informational message to the terminal by overriding the current line
 #
 # @param $1 message to display
-function dynamicEcho {
+function dynamicLog {
+    # Check if informational messages can be displayed
+    if [ $isInformationMessagesDisplayed = false ]; then
+        return 0
+    fi
+
+    # Format message if non-empty
     local message="$1"
+    if [ -n "$message" ]; then
+        message="$APP: $message"
+    fi
+
+    # Dynamically display message
     echo -en "\r\033[K$message"
 }
 
@@ -41,7 +72,8 @@ function help {
     echo "usage: ${APP} [OPTIONS]"
     echo 'OPTIONS:'
     echo '      -d | --bootstrap-directory DIRECTORY    The DIRECTORY from which bootstrap script files will be discovered and executed. '
-    echo '      -s | --sorted-discovery [true|false]    If the bootstrap script files discovery needs to be lexicographically sorted or not. Default: true.'
+    echo '      -r | --random-discovery                 Do not apply the lexicographically order when discovering script files under the bootstrap directory.'
+    echo '      -i | --no-informational-messages        Do not display informational messages.'
     echo '      -h | --help                             Display this helper message.'
 }
 
@@ -59,18 +91,20 @@ function parseOptions {
                 ;;
             -d|--bootstrap-directory)
                 bootstrapDirectory="$2"
-                shift
-                ;;
-            -s|--sorted-discovery)
-                sortedDiscovery="$2"
-                if [ ! "$sortedDiscovery" = 'true' ] && [ ! "$sortedDiscovery" = 'false' ]; then
-                    echo "Invalid sorted discovery option value '$sortedDiscovery'. Allowed values: true or false"
-                    return $INVALID_OPTION
+                if ! [ -d "$bootstrapDirectory" -a -x "$bootstrapDirectory" ]; then
+                    log $ERROR "Unable to access to the terminal session bootstrap directory '$bootstrapDirectory'."
+                    return $INVALID_BOOTSTRAP_DIRECTORY
                 fi
                 shift
                 ;;
+            -r|--random-discovery)
+                isSortedDiscovery=false
+                ;;
+            -i|--no-informational-messages)
+                isInformationMessagesDisplayed=false
+                ;;
             *)
-                echo "Unknown option '$1'. See '$APP --help'"
+                log $ERROR "Unknown option '$1'. See '$APP --help'"
                 return $INVALID_OPTION
                 ;;
         esac
@@ -83,26 +117,21 @@ function parseOptions {
 # @param nothing
 # @return >0 if an error occurred
 function bootstrap {
-    # Check if the bootstrap directory can be used
-    if [ ! -d $bootstrapDirectory ] || [ ! -x $bootstrapDirectory ]; then
-       echo "Unable to access to the terminal session bootstrap directory '$bootstrapDirectory'. Skipping terminal session bootstrap process."
-       return $INVALID_BOOTSTRAP_DIRECTORY
-    fi
-
     # Create the discovery command based on command options
     local discoveryCommand="find $bootstrapDirectory -type f"
-    if [ "$sortedDiscovery" = 'true' ]; then
+    if [ $isSortedDiscovery = true ]; then
         discoveryCommand="$discoveryCommand | sort -df"
     fi
 
     # Retrieve each bootstrap script and execute it the current terminal session.
     for bootstrapScript in `eval $discoveryCommand`; do
-        dynamicEcho "Bootstraping terminal session... ($bootstrapScript)"
+        # End with space to handle potentially bootstrap script's output messages
+        dynamicLog "Bootstraping terminal session... ($bootstrapScript): "
         source $bootstrapScript
     done
 
     # Finally remove any output message
-    dynamicEcho ''
+    dynamicLog ''
 }
 
 # Clear environment by removing function and variable declarations
@@ -110,7 +139,8 @@ function bootstrap {
 # @param nothing
 function clearEnvironment {
     # Clear function declarations
-    unset -f dynamicEcho
+    unset -f log
+    unset -f dynamicLog
     unset -f help
     unset -f parseOptions
     unset -f bootstrap
@@ -119,8 +149,11 @@ function clearEnvironment {
 
     # Clear variable declarations
     unset bootstrapDirectory
-    unset sortedDiscovery
+    unset isSortedDiscovery
+    unset isInformationMessagesDisplayed
     unset APP
+    unset INFO
+    unset ERROR
     unset HELP_WANTED
     unset INVALID_OPTION
     unset INVALID_BOOTSTRAP_DIRECTORY
