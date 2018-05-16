@@ -90,11 +90,10 @@ function bootstrap {
     fi
 
     # Create the discovery command based on command options
-    local discoveryCommand='find'
+    local discoveryCommand="find $bootstrapDirectory -type f"
     if [ "$sortedDiscovery" = 'true' ]; then
-        discoveryCommand="$discoveryCommand -s"
+        discoveryCommand="$discoveryCommand | sort -df"
     fi
-    discoveryCommand="$discoveryCommand $bootstrapDirectory -type f"
 
     # Retrieve each bootstrap script and execute it the current terminal session.
     for bootstrapScript in `eval $discoveryCommand`; do
