@@ -17,7 +17,7 @@ Because we all have our own way of managing our terminal session opening by:
 
 ## How?
 
-The [terminal-session-bootstrap](https://github.com/abourdon/terminal-session-bootstrap) project then tries to define a common way to set your terminal session opening, regardless of your shell type.
+The [terminal-session-bootstrap](https://github.com/abourdon/terminal-session-bootstrap) project defines a common way to set your terminal session opening, regardless of your shell type.
 
 Terminal session bootstrap is done by using:
 - The `session-bootstrap.sh` file
