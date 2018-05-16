@@ -9,7 +9,7 @@
 #################################################
 
 # Application name
-APP=`basename $0`
+APP='session-bootstrap'
 
 # Log levels
 INFO='INFO'
@@ -21,7 +21,7 @@ INVALID_OPTION=11
 INVALID_BOOTSTRAP_DIRECTORY=12
 
 # The directory from which bootstrap script files will be executed
-bootstrapDirectory=$HOME/.session-bootstrap
+bootstrapDirectory="$HOME/.session-bootstrap"
 
 # If the discovery of bootstrap script files has to be done in the lexicography order or not
 isSortedDiscovery=true
