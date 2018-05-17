@@ -2,14 +2,14 @@
 
 Manage several shell profiles and switch between them, but not only.
 
-(Formerly _terminal-session-boostrap_).
+(Formerly _terminal-session-bootstrap_).
 
 ![demo.gif](./resources/demo.gif)
 
 ## Why?
 
 Because we all have our own way of managing our shell session by:
-- Setting the `PATH` or `PS1` variables
+- Setting the `PATH` or `PS1` variable
 - Setting a proxy
 - Adding aliases
 - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
@@ -24,7 +24,7 @@ Because we can be constrained to change these specific configurations according 
 
 - **Manage different shell profiles**
 - Be able to define several scripts into a same profile, allowing then to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool)
-- Apply the **lexicographically order** when discovering shell profiles' scripts
+- Apply the **lexicographical order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
 
@@ -82,13 +82,13 @@ This feature can be useful if wanted to execute `shprofile` at any shell's sessi
 
 Each script is a shell script and can be anything you want: exporting variables, setting the `PATH, applying a complex initialization process... **All scripts from the selected profile are executed within the current shell session**.
 
-However, **the name of a script is important**. Following this name, the script can be executed differently.
+However, **the name of a script is important**. Depending on its name, the script can be executed differently.
 
 ##### Naming conventions
 
 ###### Execution order
 
-Scripts are discovered following the lexicographical order. Then, if you want to execute `script1.sh` before anyone else, a good practice is to use a numerical prefix in its name:
+Scripts are discovered by using the lexicographical order. Then, if you want to execute `script1.sh` before anyone else, a good practice is to use a numerical prefix in its name:
 
 ```
 1-script1.sh
