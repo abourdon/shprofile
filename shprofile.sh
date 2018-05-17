@@ -29,7 +29,8 @@ NO_ERROR=0
 HELP_WANTED=10
 CURRENT_PROFILE_WANTED=11
 AVAILABLE_PROFILES_WANTED=12
-UNLOAD_PROFILE_WANTED=13
+PROFILE_UNLOAD_WANTED=13
+PROFILE_FORGET_WANTED=14
 INVALID_PROFILE=20
 INVALID_PROFILES=21
 INVALID_PROFILE_EXECUTION_TYPE=22
@@ -84,6 +85,7 @@ function displayHelp {
     echo '      -c | --current                      Display the current enabled profile.'
     echo '      -l | --list                         Display the list of available profiles.'
     echo '      -u | --unload                       Unload the current enabled profile, if necessary.'
+    echo '      -f | --forget                       Forget the current enabled profile, without unload it.'
     echo '      -I | --no-informational-messages    Do not display informational messages.'
     echo '      -h | --help                         Display this helper message.'
 }
@@ -136,7 +138,7 @@ function executeScripts {
 
     local profileHome=$PROFILES_HOME/$profile
     if ! [ -d $profileHome -a -x $profileHome ]; then
-        log $ERROR "Unable to unload profile '$profile' (unable to access to $profileHome)."
+        log $ERROR "Unable to unload profile '$profile' (unable to access to $profileHome). To forget it, use '$APP --forget'."
         return  $INVALID_PROFILE
     fi
 
@@ -179,6 +181,13 @@ function unloadCurrentProfile {
         return $NO_ERROR
     fi
     executeScripts $currentProfile $UNLOADING_PROFILE && rm $CURRENT_PROFILE_KEEPER
+}
+
+# Forget the current enabled profile, if necessary
+#
+# @param nothing
+function forgetCurrentProfile {
+    rm -f $CURRENT_PROFILE_KEEPER
 }
 
 # Load the required profile
@@ -257,7 +266,12 @@ function parseOptions {
             -u|--unload)
                 unloadCurrentProfile
                 exitStatus=$?
-                return $([ $exitStatus -ne $NO_ERROR ] && echo $exitStatus || echo $UNLOAD_PROFILE_WANTED)
+                return $([ $exitStatus -ne $NO_ERROR ] && echo $exitStatus || echo $PROFILE_UNLOAD_WANTED)
+                ;;
+            -f|--forget)
+                forgetCurrentProfile
+                exitStatus=$?
+                return $([ $exitStatus -ne $NO_ERROR ] && echo $exitStatus || echo $PROFILE_FORGET_WANTED)
                 ;;
             -I|--no-informational-messages)
                 isInformationMessagesDisplayed=false
@@ -300,7 +314,8 @@ function main {
     if [ $exitStatus -eq $HELP_WANTED \
         -o $exitStatus -eq $CURRENT_PROFILE_WANTED \
         -o $exitStatus -eq $AVAILABLE_PROFILES_WANTED \
-        -o $exitStatus -eq $UNLOAD_PROFILE_WANTED ]; then
+        -o $exitStatus -eq $PROFILE_UNLOAD_WANTED \
+        -o $exitStatus -eq $PROFILE_FORGET_WANTED ]; then
         return $NO_ERROR
     fi
 
