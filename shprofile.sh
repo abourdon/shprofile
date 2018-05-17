@@ -172,7 +172,7 @@ function executeScripts {
     dynamicLog ''
 }
 
-# Unload the current enabled profile, if necessary
+# Unload the current enabled profile, if necessary, but not forget it.
 #
 # @param nothing
 function unloadCurrentProfile {
@@ -180,7 +180,7 @@ function unloadCurrentProfile {
     if [ -z "$currentProfile" ]; then
         return $NO_ERROR
     fi
-    executeScripts $currentProfile $UNLOADING_PROFILE && rm $CURRENT_PROFILE_KEEPER
+    executeScripts $currentProfile $UNLOADING_PROFILE
 }
 
 # Forget the current enabled profile, if necessary
