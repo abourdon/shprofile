@@ -285,7 +285,7 @@ function parseOptions {
                 requiredProfile="$argument"
                 local requiredProfileHome="$PROFILES_HOME/$requiredProfile"
                 if ! [ -d "$requiredProfileHome" -a -x "$requiredProfileHome" ]; then
-                    log $ERROR "Unknown profile '$requiredProfile' (unable to access to '$requiredProfileHome')."
+                    log $ERROR "Unknown profile '$requiredProfile' (unable to access to '$requiredProfileHome'). Use '$APP --list' to display available profiles."
                     return $INVALID_PROFILE
                 fi
                 ;;
