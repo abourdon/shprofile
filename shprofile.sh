@@ -30,10 +30,11 @@ SHP_ERROR='ERROR'
 # Exit status
 SHP_NO_ERROR=0
 SHP_HELP_WANTED=10
-SHP_CURRENT_PROFILE_WANTED=11
-SHP_AVAILABLE_PROFILES_WANTED=12
-SHP_PROFILE_UNLOAD_WANTED=13
-SHP_PROFILE_FORGET_WANTED=14
+SHP_INIT_ENVIRONMENT=11
+SHP_CURRENT_PROFILE_WANTED=12
+SHP_AVAILABLE_PROFILES_WANTED=13
+SHP_PROFILE_UNLOAD_WANTED=14
+SHP_PROFILE_FORGET_WANTED=15
 SHP_INVALID_PROFILE=20
 SHP_INVALID_PROFILES=21
 SHP_INVALID_PROFILE_EXECUTION_TYPE=22
@@ -301,8 +302,7 @@ function shpParseOptions {
     if [ -z $shpRequiredProfile ]; then
         local currentProfile=`shpGetCurrentProfile`
         if [ -z $currentProfile ]; then
-            shpLog $SHP_ERROR "Missing profile to load. Use '$SHP_APP --list' to display available profiles."
-            return $SHP_INVALID_PROFILE
+            return $SHP_INIT_ENVIRONMENT
         fi
         shpRequiredProfile=$currentProfile
     fi
@@ -318,6 +318,7 @@ function shpMain {
 
     # Check if user used a "self-contained" option and so no more execution has to be done
     if [ $exitStatus -eq $SHP_HELP_WANTED \
+        -o $exitStatus -eq $SHP_INIT_ENVIRONMENT \
         -o $exitStatus -eq $SHP_CURRENT_PROFILE_WANTED \
         -o $exitStatus -eq $SHP_AVAILABLE_PROFILES_WANTED \
         -o $exitStatus -eq $SHP_PROFILE_UNLOAD_WANTED \
