@@ -245,7 +245,7 @@ function clearEnvironment {
     unset requiredProfile
 }
 
-# Parse user-given options
+# Parse user-given options and directly execute "self-contained" options
 #
 # @param $@ user options
 function parseOptions {
@@ -310,7 +310,7 @@ function main {
     parseOptions "$@"
     local exitStatus=$?
 
-    # Check if help or current enable profile has been wanted
+    # Check if user used a "self-contained" option and so no more execution has to be done
     if [ $exitStatus -eq $HELP_WANTED \
         -o $exitStatus -eq $CURRENT_PROFILE_WANTED \
         -o $exitStatus -eq $AVAILABLE_PROFILES_WANTED \

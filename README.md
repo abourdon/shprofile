@@ -7,7 +7,7 @@ Manage several shell profiles and switch between them, but not only.
 ## Why?
 
 Because we all have our own way of managing our shell session by:
-- Setting the `PATH` variable
+- Setting the `PATH` or `PS1` variables
 - Setting a proxy
 - Adding aliases
 - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
@@ -24,8 +24,7 @@ Because we can be constrained to change these specific configurations according 
 - Be able to define several scripts into a same profile, allowing then to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool)
 - Apply the **lexicographically order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
-- Save the current profile in use to be able to quickly reload it
-- (Soon: Be able to set the prompt with the current profile name)
+- **Remember the current profile in use** to be able to quickly reload it
 
 ### Concepts
 
