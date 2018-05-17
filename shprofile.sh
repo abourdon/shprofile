@@ -72,13 +72,19 @@ function shpDynamicLog {
         return $SHP_NO_ERROR
     fi
 
-    # Format message if non-empty
+    # Prefix message with the application name
     local message="$1"
     if [ -n "$message" ]; then
         message="$SHP_APP: $message"
     fi
 
-    # Dynamically display message
+    # Then fit message's size to the terminal's line one
+    if [ $COLUMNS -lt ${#message} ]; then
+        message=`echo $message | cut -c 1-$(($COLUMNS-3))`
+        message="$message..."
+    fi
+
+    # Finally display message by moving cursor to the beginning position and by clearing the line
     echo -en "\r\033[K$message"
 }
 
