@@ -134,7 +134,7 @@ This way, the `1-script1-unload.sh` will be executed when leaving the `myfirstpr
 
 ```bash
 $ mkdir -p $HOME/.shprofile/profiles
-$ curl -o $HOME/.shprofile/shprofile.sh https://raw.githubusercontent.com/abourdon/shprofile/4.1/shprofile.sh
+$ curl -o $HOME/.shprofile/shprofile.sh https://raw.githubusercontent.com/abourdon/shprofile/4.0/shprofile.sh
 $ alias shprofile='source $HOME/.shprofile/shprofile.sh'
 ```
 
