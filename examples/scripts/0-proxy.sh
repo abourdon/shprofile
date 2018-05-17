@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Example of a simple proxy setting
+# Example of a simple proxy configuration loading
 
 # Adapt to your need
 export http_proxy=proxy
