@@ -2,6 +2,8 @@
 
 Manage several shell profiles and switch between them, but not only.
 
+(Formerly _terminal-session-boostrap_)
+
 ![demo.gif](./resources/demo.gif)
 
 ## Why?
@@ -28,7 +30,7 @@ Because we can be constrained to change these specific configurations according 
 
 ### Concepts
 
-The `shprofile` tool manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, allowing scripts to modify the current shell environment.
+`shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, allowing scripts to modify the current shell environment.
 
 #### Shell profile
 
