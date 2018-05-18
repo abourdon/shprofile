@@ -189,6 +189,7 @@ Some examples of shell profile's scripts can be found [here](examples/scripts/).
 - not being constraint to use a shell type specific user profile file (e.g., `.bash_profile` or `.zprofile`)
 
 Some alternatives of `shprofile` could be:
+- [direnv](https://direnv.net/)
 - [use](https://github.com/justincampbell/use)
 - [terminal-setup](https://github.com/pfwd/terminal-setup)
 
