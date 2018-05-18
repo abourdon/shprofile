@@ -23,7 +23,7 @@ Because we can be constrained to change these specific configurations according 
 ### Available features
 
 - **Manage different shell profiles**
-- Be able to define several scripts into a same profile, allowing then to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool)
+- Be able to define several scripts into a same profile, allowing then to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool) and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
 - Apply the **lexicographical order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
