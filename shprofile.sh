@@ -30,14 +30,14 @@ SHP_ERROR='ERROR'
 # Exit status
 SHP_NO_ERROR=0
 SHP_HELP_WANTED=10
-SHP_INIT_ENVIRONMENT=11
-SHP_CURRENT_PROFILE_WANTED=12
-SHP_AVAILABLE_PROFILES_WANTED=13
-SHP_PROFILE_UNLOAD_WANTED=14
-SHP_PROFILE_FORGET_WANTED=15
-SHP_INVALID_PROFILE=20
-SHP_INVALID_PROFILES=21
-SHP_INVALID_PROFILE_EXECUTION_TYPE=22
+SHP_CURRENT_PROFILE_WANTED=11
+SHP_AVAILABLE_PROFILES_WANTED=12
+SHP_PROFILE_UNLOAD_WANTED=13
+SHP_PROFILE_FORGET_WANTED=14
+SHP_INIT_ENVIRONMENT=20
+SHP_INVALID_PROFILE=30
+SHP_INVALID_PROFILES=31
+SHP_INVALID_PROFILE_EXECUTION_TYPE=32
 
 # Options
 shpIsInformationMessagesDisplayed=true
@@ -239,6 +239,7 @@ function shpClearEnvironment {
 
     # Clear variable declarations
     unset SHP_APP
+    unset SHP_HOME
     unset SHP_SHPROFILE_HOME
     unset SHP_PROFILES_HOME
     unset SHP_CURRENT_PROFILE_KEEPER
@@ -251,6 +252,9 @@ function shpClearEnvironment {
     unset SHP_CURRENT_PROFILE_WANTED
     unset SHP_AVAILABLE_PROFILES_WANTED
     unset SHP_UNLOAD_PROFILE_WANTED
+    unset SHP_PROFILE_FORGET_WANTED
+    unset SHP_PROFILE_UNLOAD_WANTED
+    unset SHP_INIT_ENVIRONMENT
     unset SHP_INVALID_PROFILE
     unset SHP_INVALID_PROFILES
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
@@ -324,11 +328,11 @@ function shpMain {
 
     # Check if user used a "self-contained" option and so no more execution has to be done
     if [ $exitStatus -eq $SHP_HELP_WANTED \
-        -o $exitStatus -eq $SHP_INIT_ENVIRONMENT \
         -o $exitStatus -eq $SHP_CURRENT_PROFILE_WANTED \
         -o $exitStatus -eq $SHP_AVAILABLE_PROFILES_WANTED \
         -o $exitStatus -eq $SHP_PROFILE_UNLOAD_WANTED \
-        -o $exitStatus -eq $SHP_PROFILE_FORGET_WANTED ]; then
+        -o $exitStatus -eq $SHP_PROFILE_FORGET_WANTED \
+        -o $exitStatus -eq $SHP_INIT_ENVIRONMENT ]; then
         return $SHP_NO_ERROR
     fi
 
