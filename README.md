@@ -182,6 +182,16 @@ $ shprofile --help
 
 Some examples of shell profile's scripts can be found [here](examples/scripts/).
 
+## Difference with `/etc/profile.d` and alternatives
+
+`shprofile` can be seen as a combined version of `/etc/profile.d` (because of its modular architecture) and `.bash_profile` (because focusing on a single user), by adding the ability to:
+- define several profiles
+- not being constraint to use a shell type specific user profile file (e.g., `.bash_profile` or `.zprofile`)
+
+Some alternatives of `shprofile` could be:
+- [use](https://github.com/justincampbell/use)
+- [terminal-setup](https://github.com/pfwd/terminal-setup)
+
 ## Want to contribute?
 
 Contributions are welcome :-) To do so, check out the [instructions](./CONTRIBUTING.md).
