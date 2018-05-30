@@ -6,6 +6,22 @@ Manage several shell profiles and switch between them, but not only.
 
 ![demo.gif](./resources/demo.gif)
 
+## Table of Contents
+
+- [Why?](#why)
+- [How?](#how)
+    - [Available features](#available-features)
+    - [Concepts](#concepts)
+        - [Shell profile](#shell-profile)
+        - [Shell profile memory](#shell-profile-memory)
+        - [Structure of a script](#structure-of-a-script)
+        - [Name of a script](#name-of-a-script)
+    - [Getting started](#getting-started)
+    - [Need help?](#need-help)
+- [Difference with /etc/profile.d and alternatives](#difference-with-etcprofiled-and-alternatives)
+- [Want to contribute?](#want-to-contribute)
+- [License](#license)  
+
 ## Why?
 
 Because we all have our own way of managing our shell session by:
@@ -28,7 +44,7 @@ Because we can be constrained to change these specific settings according to a g
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
 
-### Concept
+### Concepts
 
 `shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, so scripts can modify the current shell environment.
 
@@ -64,7 +80,7 @@ and be easily switched by another one via:
 $ shprofile mysecondprofile
 ```
 
-#### Current profile is kept in memory
+#### Shell profile memory
 
 The current loaded profile is kept in memory (more precisely written into a file) to be able to quickly reload it if necessary. The reload of the current profile is be done by calling `shprofile` without a profile name.
 
