@@ -13,28 +13,28 @@ Because we all have our own way of managing our shell session by:
 - Setting a proxy
 - Adding aliases
 - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
-- Applying a mandatory initialization process for a particular command line (e.g. for [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
+- Applying a mandatory initialization process for a particular command line (e.g. [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
 - ... _and so on_ 
 
-Because we can be constrained to change these specific configurations according to a given environment (e.g., when working with different clients). Then we want to manage them as _profiles_.
+Because we can be constrained to change these specific settings according to a given environment (e.g., when working with different clients). Then we want to manage them as **profiles**.
 
 ## How?
 
 ### Available features
 
 - **Manage different shell profiles**
-- Be able to define several scripts into a same profile, allowing then to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool) and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
+- Define several scripts into a same profile to be able to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool) and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
 - Apply the **lexicographical order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
 
-### Concepts
+### Concept
 
-`shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, allowing scripts to modify the current shell environment.
+`shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, so scripts can modify the current shell environment.
 
 #### Shell profile
 
-Each shell profile is defined by a set of scripts contained into its associated entry from the `$HOME/.shprofile/profiles` folder. An entry is simply a folder that is named as the profile's name.
+Each shell profile is defined by a set of scripts contained into its associated _entry_ inside the `$HOME/.shprofile/profiles` folder. An _entry_ is simply a folder which is named as the profile's name.
 
 For instance:
 
@@ -50,23 +50,23 @@ $HOME/
                 script4.sh    
 ```
 
-Defines two profiles `myfirstprofile` and `mysecondprofile` containing respectively the `script1.sh`, `script2.sh` and the `script3.sh`, `script4.sh` scripts.
+defines two profiles, `myfirstprofile` and `mysecondprofile`, containing respectively the `script1.sh`, `script2.sh` and the `script3.sh`, `script4.sh` scripts.
 
-Once profile defined, it can be simply loaded via:
+Once profile is defined, it can be simply loaded via:
 
 ```bash
 $ shprofile myfirstprofile
 ```
 
-And be switched by an other one via:
+and be easily switched by another one via:
 
 ```bash
 $ shprofile mysecondprofile
 ```
 
-#### Keep current profile in memory
+#### Current profile is kept in memory
 
-The current loaded profile is keeping in memory (more precisely written into a file) to be able to quickly reload it if necessary. The reload of the current profile can be done by calling `shprofile` without profile name.
+The current loaded profile is kept in memory (more precisely written into a file) to be able to quickly reload it if necessary. The reload of the current profile is be done by calling `shprofile` without a profile name.
 
 Thus,
 
@@ -74,35 +74,35 @@ Thus,
 $ shprofile
 ```
 
-Will reload the current profile.
+will reload the current loaded profile.
 
-This feature can be useful if wanted to execute `shprofile` at any shell's session opening. See [further](#3-bootstrap-it) for more details.
+This feature can be useful if you want to load a specific configuration at each shell session opening. See [further](#3-bootstrap-it) for more details.
 
 #### Structure of a script
 
-Each script is a shell script and can be anything you want: exporting variables, setting the `PATH, applying a complex initialization process... **All scripts from the selected profile are executed within the current shell session**.
+Each script is a shell script and can be anything you want: exporting variables, setting the `PATH`, applying a complex initialization process... **All scripts are executed within the current shell session**.
 
-However, **the name of a script is important**. Depending on its name, the script can be executed differently.
+#### Name of a script
 
-##### Naming conventions
+**The name of a script is important**. Depending on its name, a script is executed differently.
 
-###### Execution order
+##### Execution order
 
-Scripts are discovered by using the lexicographical order. Then, if you want to execute `script1.sh` before anyone else, a good practice is to use a numerical prefix in its name:
+Scripts are discovered by using the lexicographical order. Then, if you want to execute `script1.sh` before another one, a good practice is to use a numerical prefix in its name:
 
 ```
 1-script1.sh
 ``` 
 
-###### Execution type
+##### Execution type
 
 There are two types of scripts:
 - Loading scripts (by default)
 - Unloading scripts
 
-Any script is by default a loading script, that is: executed when a profile is loading.
+Any script is by default a loading script. That is: executed when a profile is loading.
 
-To handle transition between profiles, there is a second type: unloading scripts. Unloading scripts are executed before loading the required profile. An unloading script must be suffixed by the keyword `-unload`:
+To handle transition between profiles, there are unloading scripts. Unloading scripts are executed before loading an other profile. An unloading script must be suffixed by the keyword `-unload`:
 
 ```
 script2-unload.sh
@@ -186,9 +186,9 @@ Some examples of shell profile's scripts can be found [here](examples/scripts/).
 
 `shprofile` can be seen as a combined version of `/etc/profile.d` (because of its modular architecture) and `.bash_profile` (because focusing on a single user), by adding the ability to:
 - define several profiles
-- not being constraint to use a shell type specific user profile file (e.g., `.bash_profile` or `.zprofile`)
+- not being constrained to use a shell type specific user profile file (e.g., `.bash_profile` or `.zprofile`)
 
-Some alternatives of `shprofile` could be:
+Some alternatives to `shprofile` could be:
 - [direnv](https://direnv.net/)
 - [use](https://github.com/justincampbell/use)
 - [terminal-setup](https://github.com/pfwd/terminal-setup)
