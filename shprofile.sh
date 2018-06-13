@@ -13,7 +13,7 @@
 
 # Application name
 SHP_APP='shprofile'
-SHP_VERSION='4.4-SNAPSHOT'
+SHP_VERSION='4.4'
 
 # Associated files
 SHP_HOME="$HOME/.shprofile"
