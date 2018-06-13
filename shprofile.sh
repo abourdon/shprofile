@@ -81,8 +81,9 @@ function shpDynamicLog {
     fi
 
     # Then fit message's size to the terminal's line one
-    if [ $COLUMNS -lt ${#message} ]; then
-        message=`echo $message | cut -c 1-$(($COLUMNS-3))`
+    local columns=`tput cols`
+    if [ $columns -lt ${#message} ]; then
+        message=`echo $message | cut -c 1-$(($columns-3))`
         message="$message..."
     fi
 
