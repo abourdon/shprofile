@@ -13,11 +13,12 @@
 
 # Application name
 SHP_APP='shprofile'
+SHP_VERSION='4.3-SNAPSHOT'
 
 # Associated files
 SHP_HOME="$HOME/.shprofile"
-SHP_PROFILES_HOME=$SHP_HOME/profiles
-SHP_CURRENT_PROFILE_KEEPER=$SHP_HOME/current
+SHP_PROFILES_HOME="$SHP_HOME/profiles"
+SHP_CURRENT_PROFILE_KEEPER="$SHP_HOME/current"
 
 # Profile execution types
 SHP_LOADING_PROFILE='LOADING_PROFILE'
@@ -34,6 +35,7 @@ SHP_CURRENT_PROFILE_WANTED=11
 SHP_AVAILABLE_PROFILES_WANTED=12
 SHP_PROFILE_UNLOAD_WANTED=13
 SHP_PROFILE_FORGET_WANTED=14
+SHP_VERSION_WANTED=15
 SHP_INIT_ENVIRONMENT=20
 SHP_INVALID_PROFILE=30
 SHP_INVALID_PROFILES=31
@@ -101,6 +103,14 @@ function shpDisplayHelp {
     echo '      -f | --forget                       Forget the current enabled profile, without unload it.'
     echo '      -I | --no-informational-messages    Do not display informational messages.'
     echo '      -h | --help                         Display this helper message.'
+    echo '      -v | --version                      Display release information.'
+}
+
+# Display release information
+#
+# @param nothing
+function shpDisplayVersion {
+    echo "$SHP_APP $SHP_VERSION"
 }
 
 # Get the current enabled profile
@@ -175,6 +185,7 @@ function shpExecuteScripts {
     messagePrefix="$messagePrefix profile '$profile'..."
 
     # Retrieve each bootstrap script and execute it the current terminal session.
+    local scriptToExecute=''
     for scriptToExecute in `eval $scriptsToExecute`; do
         # End with space to handle potentially bootstrap script's output messages
         shpDynamicLog "$messagePrefix ($scriptToExecute): "
@@ -217,9 +228,7 @@ function shpProcessProfile {
     shpUnloadCurrentProfile && shpLoadRequiredProfile
 }
 
-# Clear environment by removing function and variable declarations in this script.
-#
-# Useful because this script needs to be sourced.
+# As shprofile needs to be sourced, then it is necessary to clear environment of shprofile's variables or functions.
 #
 # @param nothing
 function shpClearEnvironment {
@@ -235,10 +244,12 @@ function shpClearEnvironment {
     unset -f shpProcessProfile
     unset -f shpClearEnvironment
     unset -f shpParseOptions
+    unset -f shpProcessShprofile
     unset -f shpMain
 
     # Clear variable declarations
     unset SHP_APP
+    unset SHP_VERSION
     unset SHP_HOME
     unset SHP_SHPROFILE_HOME
     unset SHP_PROFILES_HOME
@@ -254,6 +265,7 @@ function shpClearEnvironment {
     unset SHP_UNLOAD_PROFILE_WANTED
     unset SHP_PROFILE_FORGET_WANTED
     unset SHP_PROFILE_UNLOAD_WANTED
+    unset SHP_VERSION_WANTED
     unset SHP_INIT_ENVIRONMENT
     unset SHP_INVALID_PROFILE
     unset SHP_INVALID_PROFILES
@@ -298,6 +310,11 @@ function shpParseOptions {
                 exitStatus=$?
                 return $([ $exitStatus -ne $SHP_NO_ERROR ] && echo $exitStatus || echo $SHP_HELP_WANTED)
                 ;;
+            -v|--version)
+                shpDisplayVersion
+                exitStatus=$?
+                return $([ $exitStatus -ne $SHP_NO_ERROR ] && echo $exitStatus || echo $SHP_VERSION_WANTED)
+                ;;
             *)
                 shpRequiredProfile="$argument"
                 local requiredProfileHome="$SHP_PROFILES_HOME/$shpRequiredProfile"
@@ -318,10 +335,11 @@ function shpParseOptions {
     fi
 }
 
-# Main entry point
+# Really process shprofile, without clearing the environment
 #
 # @param $@ the program arguments
-function shpMain {
+# @see shpClearEnvironment
+function shpProcessShprofile {
     # Parse options
     shpParseOptions "$@"
     local exitStatus=$?
@@ -332,6 +350,7 @@ function shpMain {
         -o $exitStatus -eq $SHP_AVAILABLE_PROFILES_WANTED \
         -o $exitStatus -eq $SHP_PROFILE_UNLOAD_WANTED \
         -o $exitStatus -eq $SHP_PROFILE_FORGET_WANTED \
+        -o $exitStatus -eq $SHP_VERSION_WANTED \
         -o $exitStatus -eq $SHP_INIT_ENVIRONMENT ]; then
         return $SHP_NO_ERROR
     fi
@@ -343,7 +362,15 @@ function shpMain {
 
     # Process profile
     shpProcessProfile
-    exitStatus=$?
+}
+
+# Main entry point
+#
+# @param $@ the program arguments
+function shpMain {
+    # Process shprofile
+    shpProcessShprofile "$@"
+    local exitStatus=$?
 
     # Finally clear the environment
     shpClearEnvironment
