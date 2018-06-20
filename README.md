@@ -24,7 +24,7 @@ Manage several shell profiles and switch between them, but not only.
 
 ## Why?
 
-Because we all have our own way of managing our shell session by:
+Because we all have our own way to manage our shell session by:
 - Setting the `PATH` or `PS1` variable
 - Setting a proxy
 - Adding aliases
@@ -40,7 +40,7 @@ Because we can be constrained to change these specific settings according to a g
 
 - **Manage different shell profiles**
 - Define several scripts into a same profile to be able to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool) and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
-- Apply the **lexicographical order** when discovering shell profiles' scripts
+- Apply a **lexicographical order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
 
