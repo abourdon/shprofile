@@ -24,15 +24,18 @@ Manage several shell profiles and switch between them, but not only.
 
 ## Why?
 
-Because we all have our own way to manage our shell session by:
-- Setting the `PATH` or `PS1` variable
-- Setting a proxy
-- Adding aliases
-- Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
-- Applying a mandatory initialization process for a particular command line (e.g. [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
-- ... _and so on_ 
+Because:
 
-Because we can be constrained to change these specific settings according to a given environment (e.g., when working with different clients). Then we want to manage them as **profiles**.
+- We all have our own way to manage our shell session by:
+    - Setting the `PATH` or `PS1` variable
+    - Setting a proxy
+    - Adding aliases
+    - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
+    - Applying a mandatory initialization process for a particular command line (e.g. [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
+    - ... _and so on_
+- We can be constrained to change those specific settings **according to a given environment** (e.g., when working with different clients), and then have different versions, or **profiles**, of our shell session settings
+- The more specific settings we have, **the bigger and more difficult it is to maintain the session settings file** (`.bashrc`, `.bash_profile`, `.zshrc`...)
+- We don't want to **backup** our entire shell session settings file but only our specific settings
 
 ## How?
 
