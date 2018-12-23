@@ -13,7 +13,7 @@
 
 # Application name
 SHP_APP='shprofile'
-SHP_VERSION='4.5-SNAPSHOT'
+SHP_VERSION='4.5'
 
 # Associated files
 SHP_HOME="$HOME/.shprofile"
@@ -111,7 +111,7 @@ function shpDisplayHelp {
 #
 # @param nothing
 function shpDisplayVersion {
-    echo "$SHP_APP $SHP_VERSION"
+    echo "$SHP_APP version $SHP_VERSION"
 }
 
 # Get the current enabled profile
