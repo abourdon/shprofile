@@ -172,11 +172,11 @@ function shpExecuteScripts {
     local messagePrefix=''
     case "$executionType" in
         $SHP_LOADING_PROFILE)
-            scriptsToExecute="find $profileHome -type f | grep -v -E '\-unload(.[^.]+)?$' | sort -df"
+            scriptsToExecute="find $profileHome -type f | grep -v -E '\-unload(\.[^\.]+)?$' | sort -df"
             messagePrefix='Loading'
             ;;
         $SHP_UNLOADING_PROFILE)
-             scriptsToExecute="find $profileHome -type f | grep -E '\-unload(.[^.]+)?$' | sort -df"
+             scriptsToExecute="find $profileHome -type f | grep -E '\-unload(\.[^\.]+)?$' | sort -df"
              messagePrefix='Unloading'
             ;;
         *)
