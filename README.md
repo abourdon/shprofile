@@ -147,6 +147,10 @@ $HOME/
 
 This way, the `1-script1-unload.sh` will be executed when leaving the `myfirstprofile`, and before the `script2-unload.sh` one.   
 
+##### Disable script execution
+
+Any dot file is ignored. So to disable execution of a script, you just have to rename it by adding the `.` prefix.  
+
 ### Getting started
 
 #### 1. Install it

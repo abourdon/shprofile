@@ -188,8 +188,15 @@ function shpExecuteScripts {
     # Retrieve each bootstrap script and execute it the current terminal session.
     local scriptToExecute=''
     for scriptToExecute in `eval $scriptsToExecute`; do
+        local message="$messagePrefix ($scriptToExecute):"
+        local scriptFileName=`basename $scriptToExecute`
+        # If script file is a dot file then ignore it
+        if [[ $scriptFileName =~ ^\. ]]; then
+            shpDynamicLog "$message (execution disabled)"
+            continue
+        fi
         # End with space to handle potentially bootstrap script's output messages
-        shpDynamicLog "$messagePrefix ($scriptToExecute): "
+        shpDynamicLog "$message "
         source $scriptToExecute
     done
 
