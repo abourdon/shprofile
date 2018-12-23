@@ -191,7 +191,8 @@ function shpExecuteScripts {
         local message="$messagePrefix ($scriptToExecute):"
         local scriptFileName=`basename $scriptToExecute`
         # If script file is a dot file then ignore it
-        if [[ $scriptFileName =~ ^\. ]]; then
+        # Note: prefer not using regex matching to ensure compatibility with any shell
+        if [ "${scriptFileName:0:1}" = "." ]; then
             shpDynamicLog "$message (execution disabled)"
             continue
         fi
