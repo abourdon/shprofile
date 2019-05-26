@@ -222,7 +222,7 @@ Contributions are welcome :-) To do so, check out the [instructions](./CONTRIBUT
 
 ## License
 
-Copyright (c) 2018 Aurélien Bourdon
+Copyright (c) 2019 Aurélien Bourdon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
