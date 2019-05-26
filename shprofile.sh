@@ -247,6 +247,9 @@ function shpClearEnvironment {
     unset -f shpDisplayHelp
     unset -f shpGetCurrentProfile
     unset -f shpDisplayCurrentProfile
+    unset -f shpDisplayAvailableProfiles
+    unset -f shpDisplayVersion
+    unset -f shpForgetCurrentProfile
     unset -f shpExecuteScripts
     unset -f shpUnloadCurrentProfile
     unset -f shpLoadRequiredProfile
