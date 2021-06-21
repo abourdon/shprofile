@@ -1,8 +1,6 @@
 # shprofile - shell profile manager
 
-Manage several shell profiles and switch between them, but not only.
-
-(Formerly _terminal-session-bootstrap_).
+Manage several shell profiles and switch between them.
 
 ![demo.gif](./resources/demo.gif)
 
@@ -26,34 +24,34 @@ Manage several shell profiles and switch between them, but not only.
 
 Because:
 
-- We all have our own way to manage our shell session by:
-    - Setting the `PATH` or `PS1` variable
-    - Setting a proxy
-    - Adding aliases
-    - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
-    - Applying a mandatory initialization process for a particular command line (e.g. [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
-    - ... _and so on_
-- We can be constrained to change those specific settings **according to a given environment** (e.g., when working with different clients), and then have different versions, or **profiles**, of our shell session settings
-- The more specific settings we have, **the bigger and more difficult it is to maintain the session settings file** (`.bashrc`, `.bash_profile`, `.zshrc`...)
-- We don't want to **backup** our entire shell session settings file but only our specific settings
+- We all need to manage our shell session by:
+  - Setting the `PATH` or `PS1` variable
+  - Setting a proxy
+  - Adding aliases
+  - Writing a configuration file for a particular command (e.g. [vim](https://www.vim.org/)'s `.vimrc`, [screen](https://www.gnu.org/software/screen/)'s `.screenrc`)
+  - Applying a mandatory initialization process for a particular command line (e.g. [jenv](http://www.jenv.be/), [nvm](https://github.com/creationix/nvm) or [rbenv](https://github.com/rbenv/rbenv))
+  - ... _and so on_
+- We may require to change those specific settings according to a given environment (e.g., by working in several contexts/clients), and thus need to manage several shell environments, or profiles, in parallel
+- The more different environments we have, the more complicated it is to maintain our shell profile files (`.bashrc`, `.bash_profile`, `.zshrc`...)
+- We want to backup our shell session settings by focusing only on our own settings
 
 ## How?
 
 ### Available features
 
-- **Manage different shell profiles**
-- Define several scripts into a same profile to be able to **modularize shell profiles' scripts** (e.g., 1 script for 1 tool) and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
+- **Manage different shell session settings**, or profiles
+- **Unclutter** shell session settings **by modularizing the configuration** and be able, for instance, to define 1 script file for 1 configuration/tool type and easily [import or export them](https://github.com/abourdon/shprofile/tree/master/examples/scripts)
 - Apply a **lexicographical order** when discovering shell profiles' scripts
 - Allow to define _loading_ and _unloading_ shell profile script types to **handle transition between profiles**
 - **Remember the current profile in use** to be able to quickly reload it
 
 ### Concepts
 
-`shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts execution is done within the current shell session, so scripts can modify the current shell environment.
+`shprofile` manages a set of _shell profiles_ which can be enabled at any time. Scripts are executed within the current shell session, so scripts can modify the current shell environment.
 
 #### Shell profile
 
-Each shell profile is defined by a set of scripts contained into its associated _entry_ inside the `$HOME/.shprofile/profiles` folder. An _entry_ is simply a folder which is named as the profile's name.
+Each shell profile is defined by a **set of scripts** contained into and associated folder from the `$HOME/.shprofile/profiles` profiles root folder.
 
 For instance:
 
@@ -85,7 +83,7 @@ $ shprofile mysecondprofile
 
 #### Shell profile memory
 
-The current loaded profile is kept in memory (more precisely written into a file) to be able to quickly reload it if necessary. The reload of the current profile is be done by calling `shprofile` without a profile name.
+The current loaded profile is kept in memory (more precisely written into a file) to be quickly reloaded if necessary. The reload of the current profile can be done by calling `shprofile` without a profile name.
 
 Thus,
 
@@ -95,7 +93,7 @@ $ shprofile
 
 will reload the current loaded profile.
 
-This feature can be useful if you want to load a specific configuration at each shell session opening. See [further](#3-bootstrap-it) for more details.
+Note that this feature can be useful if a specific configuration needs to be executed at any shell session openings. See [further](#3-bootstrap-it) for more details.
 
 #### Structure of a script
 
@@ -119,9 +117,9 @@ There are two types of scripts:
 - Loading scripts (by default)
 - Unloading scripts
 
-Any script is by default a loading script. That is: executed when a profile is loading.
+A script is by default a loading script. That is: executed when a profile is loading.
 
-To handle transition between profiles, there are unloading scripts. Unloading scripts are executed before loading an other profile. An unloading script must be suffixed by the keyword `-unload`:
+But sometimes it may be necessary to run scripts during the transition to another profile. In this case, there are unloading scripts. An unloading script is suffixed by the keyword `-unload`:
 
 ```
 script2-unload.sh
@@ -129,7 +127,9 @@ script2-unload.sh
 
 ##### Combine naming conventions
 
-Of course, execution order and execution type can be combined. For instance:
+Of course, execution order and execution type can be combined.
+
+Let's take an example:
 
 ```
 $HOME/
@@ -145,11 +145,11 @@ $HOME/
                 script4.sh
 ```
 
-This way, the `1-script1-unload.sh` will be executed when leaving the `myfirstprofile`, and before the `script2-unload.sh` one.   
+In this scenario, the `1-script1-unload.sh` script will be executed when leaving the `myfirstprofile` profile, and before executing the `script2-unload.sh` script.   
 
 ##### Disable script execution
 
-Any dot file is ignored. So to disable execution of a script, you just have to rename it by adding the `.` prefix.  
+Any dot file is ignored. So to disable execution of a script, just prefix it by the `.` character.
 
 ### Getting started
 
@@ -222,7 +222,7 @@ Contributions are welcome :-) To do so, check out the [instructions](./CONTRIBUT
 
 ## License
 
-Copyright (c) 2019 Aurélien Bourdon
+Copyright (c) 2021 Aurélien Bourdon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

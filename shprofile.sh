@@ -81,9 +81,9 @@ function shpDynamicLog {
     fi
 
     # Then fit message's size to the terminal's line one
-    local columns=`tput cols`
+    local columns=$(tput cols)
     if [ $columns -lt ${#message} ]; then
-        message=`echo $message | cut -c 1-$(($columns-3))`
+        message=$(echo $message | cut -c 1-$(($columns-3)))
         message="$message..."
     fi
 
@@ -141,7 +141,7 @@ function shpDisplayAvailableProfiles {
         return $SHP_INVALID_PROFILES
     fi
     local currentProfile=$(shpGetCurrentProfile)
-    for profile in `ls $SHP_PROFILES_HOME`; do
+    for profile in $(ls $SHP_PROFILES_HOME); do
         if [ $profile = "$currentProfile" ]; then
             echo -n '* '
         fi
@@ -209,7 +209,7 @@ function shpExecuteScripts {
 #
 # @param nothing
 function shpUnloadCurrentProfile {
-    local currentProfile=`shpGetCurrentProfile`
+    local currentProfile=$(shpGetCurrentProfile)
     if [ -z "$currentProfile" ]; then
         return $SHP_NO_ERROR
     fi
@@ -339,7 +339,7 @@ function shpParseOptions {
         shift
     done
     if [ -z $shpRequiredProfile ]; then
-        local currentProfile=`shpGetCurrentProfile`
+        local currentProfile=$(shpGetCurrentProfile)
         if [ -z $currentProfile ]; then
             return $SHP_INIT_ENVIRONMENT
         fi
