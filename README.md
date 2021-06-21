@@ -157,7 +157,7 @@ Any dot file is ignored. So to disable execution of a script, just prefix it by 
 
 ```bash
 $ mkdir -p $HOME/.shprofile/profiles
-$ curl -o $HOME/.shprofile/shprofile.sh https://raw.githubusercontent.com/abourdon/shprofile/4.7/shprofile.sh
+$ curl -o $HOME/.shprofile/shprofile.sh https://raw.githubusercontent.com/abourdon/shprofile/4.8/shprofile.sh
 $ alias shprofile='source $HOME/.shprofile/shprofile.sh'
 ```
 
