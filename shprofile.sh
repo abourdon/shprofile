@@ -309,6 +309,9 @@ function shpClearEnvironment {
     unset SHP_INVALID_PROFILE
     unset SHP_INVALID_PROFILES
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
+    unset SHP_PROFILE_CREATED
+    unset SHP_PROFILE_DELETED
+    unset SHP_PROFILE_DELETE_ABORTED
     unset shpIsInformationMessagesDisplayed
     unset shpRequiredProfile
 }
@@ -330,6 +333,19 @@ function shpCreateProfile {
     
     mkdir -p "$profileHome"
     chmod +x "$profileHome"
+    cat > "$profileHome"/001-rcm.sh << EOF
+#!/usr/bin/env bash
+# 
+# Load all rcm-managed dotfiles for this shprofile, represented as a tag in rcm
+rcup -t $profileName
+EOF
+    cat > "$profileHome"/999-rcm-unload.sh << EOF
+#!/usr/bin/env bash
+#
+# Remove all rcm-managed dotfiles tagged with the current shprofile
+rcdn -t $profileName
+EOF
+    shpRequiredProfile=$profileName
     return $SHP_PROFILE_CREATED
 }
 
@@ -485,7 +501,6 @@ function shpProcessShprofile {
         || [ $exitStatus -eq $SHP_PROFILE_FORGET_WANTED ] \
         || [ $exitStatus -eq $SHP_VERSION_WANTED ] \
         || [ $exitStatus -eq $SHP_INIT_ENVIRONMENT ] \
-        || [ $exitStatus -eq $SHP_PROFILE_CREATED ] \
         || [ $exitStatus -eq $SHP_PROFILE_DELETED ] \
         || [ $exitStatus -eq $SHP_PROFILE_DELETE_ABORTED ]
     then
@@ -493,7 +508,7 @@ function shpProcessShprofile {
     fi
 
     # Check if any error was met during option parsing
-    if [ $exitStatus -ne $SHP_NO_ERROR ]; then
+    if [ $exitStatus -ne $SHP_NO_ERROR ] && [ $exitStatus -ne $SHP_PROFILE_CREATED ]; then
         return $exitStatus
     fi
 
