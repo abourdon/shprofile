@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 #
-# shprofile: Manage several shell profiles and switch between them, but not only.
+# shp: Manage several shell profiles and switch between them, including 
+# configuration files.
 #
-# @author Aurelien Bourdon
+# Based on shprofiles by Aurelien Bourdon.
+# @author Carlos Sanabria
 
 #####################################################
 # Internal variables                                #
@@ -12,11 +14,11 @@
 #####################################################
 
 # Application name
-SHP_APP='shprofile'
-SHP_VERSION='4.9-SNAPSHOT'
+SHP_APP='shp'
+SHP_VERSION='5.0'
 
 # Associated files
-SHP_HOME="$HOME/.shprofile"
+SHP_HOME="$HOME/.shp"
 SHP_PROFILES_HOME="$SHP_HOME/profiles"
 SHP_CURRENT_PROFILE_KEEPER="$SHP_HOME/current"
 
@@ -40,6 +42,9 @@ SHP_INIT_ENVIRONMENT=20
 SHP_INVALID_PROFILE=30
 SHP_INVALID_PROFILES=31
 SHP_INVALID_PROFILE_EXECUTION_TYPE=32
+SHP_PROFILE_CREATED=40
+SHP_PROFILE_DELETED=41
+SHP_PROFILE_DELETE_ABORTED=42
 
 # Options
 shpIsInformationMessagesDisplayed=true
@@ -51,6 +56,28 @@ shpRequiredProfile=''
 # All prefixed with 'shp' to facilitate their reuse #
 # in profile's shell scripts                        #
 #####################################################
+split() { # args: string delimiter result_var
+  if
+    [ -n "$ZSH_VERSION" ] &&
+      autoload is-at-least &&
+      is-at-least 5.0.8 # for ps:$var:
+  then
+    eval $3'=("${(@ps:$2:)1}")'
+  elif
+    [ "$BASH_VERSINFO" -gt 4 ] || {
+      [ "$BASH_VERSINFO" -eq 4 ] && [ "${BASH_VERSINFO[1]}" -ge 4 ]
+      # 4.4+ required for "local -"
+    }
+  then
+    local - IFS="$2"
+    set -o noglob
+    eval "$3"'=( $1"" )'
+  else
+    echo >&2 "Your shell is not supported"
+    exit 1
+  fi
+}
+
 
 # Display a log message to the terminal
 #
@@ -286,7 +313,91 @@ function shpClearEnvironment {
     unset shpRequiredProfile
 }
 
-# Parse user-given options and directly execute "self-contained" options
+# Creates a new shprofile
+#
+# @param $@ profile
+function shpCreateProfile {
+    local profileName="$1"
+    if [ -z "$profileName" ]; then
+        shpLog $SHP_ERROR "Profile name is required."
+        return $SHP_INVALID_PROFILE
+    fi
+    local profileHome="$SHP_PROFILES_HOME/$profileName"
+    if [ -d "$profileHome" ]; then
+        shpLog $SHP_ERROR "Profile '$profileName' already exists."
+        return $SHP_INVALID_PROFILE
+    fi
+    
+    mkdir -p "$profileHome"
+    chmod +x "$profileHome"
+    return $SHP_PROFILE_CREATED
+}
+
+# Deletes an existing shprofile
+#
+# @param $@ profile
+function shpDeleteProfile {
+    local profileName="$1"
+    if [ -z "$profileName" ]; then
+        shpLog $SHP_ERROR "Profile name is required."
+        return $SHP_INVALID_PROFILE
+    fi
+    local profileHome="$SHP_PROFILES_HOME/$profileName"
+    if ! [ -d "$profileHome" ]; then
+        shpLog $SHP_ERROR "Profile '$profileName' does not exist."
+        return $SHP_INVALID_PROFILE
+    fi
+    
+    # Prompt user for confirmation
+    echo "Are you sure you want to delete profile '$profileName'? [y/N] "
+    read -r confirmation
+    if [[ "$confirmation" != [yY] ]]; then
+        echo "Aborting profile deletion."
+        return $SHP_PROFILE_DELETE_ABORTED
+    fi
+    
+    # Check if profile to delete is the current one
+    local currentProfile
+    currentProfile=$(shpGetCurrentProfile)
+    
+    if [ "$currentProfile" = "$profileName" ]; then
+        echo "DEBUG: Forgetting current profile '$profileName'"
+        shpForgetCurrentProfile
+    fi
+
+    # Delete profile
+    rm -rf "$profileHome"
+    return $SHP_PROFILE_DELETED
+}
+
+# BEGIN: executeCommand
+# Execute different commands depending on the argument value
+#
+# @param $@ arguments
+function executeCommand {
+    while [[ $# -gt 0 ]]; do
+        local argument="$1"
+        case $argument in
+            -c|--current)
+                shpDisplayCurrentProfile
+                ;;
+            -l|--list)
+                shpDisplayAvailableProfiles
+                ;;
+            -u|--unload)
+                shpUnloadCurrentProfile
+                ;;
+            -f|--forget)
+                shpForgetCurrentProfile
+                ;;
+            *)
+                echo "Invalid argument: $argument"
+                ;;
+        esac
+        shift
+    done
+}
+# END: executeCommand
 #
 # @param $@ user options
 function shpParseOptions {
@@ -327,6 +438,16 @@ function shpParseOptions {
                 exitStatus=$?
                 return $([ $exitStatus -ne $SHP_NO_ERROR ] && echo $exitStatus || echo $SHP_VERSION_WANTED)
                 ;;
+            -k|--create)
+                shpCreateProfile "$2"
+                exitStatus=$?
+                return $([ $exitStatus -ne $SHP_NO_ERROR ] && echo "$exitStatus" || echo "$SHP_PROFILE_CREATION_WANTED")
+                ;;
+            -d|--delete)
+                shpDeleteProfile "$2"
+                exitStatus=$?
+                return $([ $exitStatus -ne $SHP_NO_ERROR ] && echo "$exitStatus" || echo "$SHP_PROFILE_DELETION_WANTED")
+                ;;
             *)
                 shpRequiredProfile="$argument"
                 local requiredProfileHome="$SHP_PROFILES_HOME/$shpRequiredProfile"
@@ -338,7 +459,7 @@ function shpParseOptions {
         esac
         shift
     done
-    if [ -z $shpRequiredProfile ]; then
+    if [ -z "$shpRequiredProfile" ]; then
         local currentProfile=$(shpGetCurrentProfile)
         if [ -z $currentProfile ]; then
             return $SHP_INIT_ENVIRONMENT
@@ -357,13 +478,17 @@ function shpProcessShprofile {
     local exitStatus=$?
 
     # Check if user used a "self-contained" option and so no more execution has to be done
-    if [ $exitStatus -eq $SHP_HELP_WANTED \
-        -o $exitStatus -eq $SHP_CURRENT_PROFILE_WANTED \
-        -o $exitStatus -eq $SHP_AVAILABLE_PROFILES_WANTED \
-        -o $exitStatus -eq $SHP_PROFILE_UNLOAD_WANTED \
-        -o $exitStatus -eq $SHP_PROFILE_FORGET_WANTED \
-        -o $exitStatus -eq $SHP_VERSION_WANTED \
-        -o $exitStatus -eq $SHP_INIT_ENVIRONMENT ]; then
+    if [ $exitStatus -eq $SHP_HELP_WANTED ] \
+        || [ $exitStatus -eq $SHP_CURRENT_PROFILE_WANTED ] \
+        || [ $exitStatus -eq $SHP_AVAILABLE_PROFILES_WANTED ] \
+        || [ $exitStatus -eq $SHP_PROFILE_UNLOAD_WANTED ] \
+        || [ $exitStatus -eq $SHP_PROFILE_FORGET_WANTED ] \
+        || [ $exitStatus -eq $SHP_VERSION_WANTED ] \
+        || [ $exitStatus -eq $SHP_INIT_ENVIRONMENT ] \
+        || [ $exitStatus -eq $SHP_PROFILE_CREATED ] \
+        || [ $exitStatus -eq $SHP_PROFILE_DELETED ] \
+        || [ $exitStatus -eq $SHP_PROFILE_DELETE_ABORTED ]
+    then
         return $SHP_NO_ERROR
     fi
 
