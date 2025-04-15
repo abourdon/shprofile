@@ -44,6 +44,7 @@ SHP_INVALID_PROFILE_EXECUTION_TYPE=32
 # Options
 shpIsInformationMessagesDisplayed=true
 shpIsCommandStandardOutputDisplayed=true
+shpIsCommandExecutionErrorDetected=false
 shpRequiredProfile=''
 
 #####################################################
@@ -103,7 +104,7 @@ function shpDisplayHelp {
     echo '      -l | --list                         Display the list of available profiles.'
     echo '      -u | --unload                       Unload the current enabled profile, if necessary.'
     echo '      -f | --forget                       Forget the current enabled profile, without unload it.'
-    echo '      -I | --no-informational-messages    Do not display informational messages.'
+    echo '      -I | --no-informational-messages    Do not display informational messages.' 
     echo "      -S | --no-command-stdout            Do not display command execution's standard output messages (but messages on standard error stream will still be displayed)."
     echo '      -h | --help                         Display this helper message.'
     echo '      -v | --version                      Display release information.'
@@ -206,6 +207,10 @@ function shpExecuteScripts {
         else
             source $scriptToExecute
         fi
+        # Remember in case of command execution error to inform the user later
+        if [ $? -ne 0 ]; then
+            shpIsCommandExecutionErrorDetected=true
+        fi
     done
 
     # Finally remove any output message
@@ -291,6 +296,7 @@ function shpClearEnvironment {
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
     unset shpIsInformationMessagesDisplayed
     unset shpIsCommandStandardOutputDisplayed
+    unset shpIsCommandExecutionErrorDetected
     unset shpRequiredProfile
 }
 
@@ -385,6 +391,11 @@ function shpProcessShprofile {
 
     # Process profile
     shpProcessProfile
+
+    # Inform if error occured during command execution
+    if [ $shpIsCommandExecutionErrorDetected = 'true' ]; then
+        shpLog $SHP_ERROR "Error(s) occured during profile's scripts executions. Profile may not be initialized properly."
+    fi
 }
 
 # Main entry point
