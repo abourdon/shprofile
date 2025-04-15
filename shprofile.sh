@@ -43,6 +43,7 @@ SHP_INVALID_PROFILE_EXECUTION_TYPE=32
 
 # Options
 shpIsInformationMessagesDisplayed=true
+shpIsCommandStandardOutputDisplayed=true
 shpRequiredProfile=''
 
 #####################################################
@@ -103,6 +104,7 @@ function shpDisplayHelp {
     echo '      -u | --unload                       Unload the current enabled profile, if necessary.'
     echo '      -f | --forget                       Forget the current enabled profile, without unload it.'
     echo '      -I | --no-informational-messages    Do not display informational messages.'
+    echo "      -S | --no-command-stdout            Do not display command execution's standard output messages (but messages on standard error stream will still be displayed)."
     echo '      -h | --help                         Display this helper message.'
     echo '      -v | --version                      Display release information.'
 }
@@ -196,9 +198,14 @@ function shpExecuteScripts {
             shpDynamicLog "$message (execution disabled)"
             continue
         fi
-        # End with space to handle potentially bootstrap script's output messages
+        # End with space to handle potentially bootstrap script's output/error messages
         shpDynamicLog "$message "
-        source $scriptToExecute
+        # Execute the script with/without stdout needed
+        if [ $shpIsCommandStandardOutputDisplayed = 'false' ]; then
+            source $scriptToExecute 1> /dev/null
+        else
+            source $scriptToExecute
+        fi
     done
 
     # Finally remove any output message
@@ -283,6 +290,7 @@ function shpClearEnvironment {
     unset SHP_INVALID_PROFILES
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
     unset shpIsInformationMessagesDisplayed
+    unset shpIsCommandStandardOutputDisplayed
     unset shpRequiredProfile
 }
 
@@ -316,6 +324,9 @@ function shpParseOptions {
                 ;;
             -I|--no-informational-messages)
                 shpIsInformationMessagesDisplayed=false
+                ;;
+            -S|--no-command-stdout)
+                shpIsCommandStandardOutputDisplayed=false
                 ;;
             -h|--help)
                 shpDisplayHelp
