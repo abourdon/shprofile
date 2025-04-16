@@ -40,11 +40,12 @@ SHP_INIT_ENVIRONMENT=20
 SHP_INVALID_PROFILE=30
 SHP_INVALID_PROFILES=31
 SHP_INVALID_PROFILE_EXECUTION_TYPE=32
+SHP_SCRIPT_EXECUTION_ERROR=40
 
 # Options
 shpIsInformationMessagesDisplayed=true
 shpIsCommandStandardOutputDisplayed=true
-shpIsCommandExecutionErrorDetected=false
+shpIsScriptExecutionErrorDetected=false
 shpRequiredProfile=''
 
 #####################################################
@@ -207,9 +208,10 @@ function shpExecuteScripts {
         else
             source $scriptToExecute
         fi
-        # Remember in case of command execution error to inform the user later
+        # Do not fail in case of script execution error (because scripts aren't dependent from each others),
+        # but remember it to inform the user later
         if [ $? -ne 0 ]; then
-            shpIsCommandExecutionErrorDetected=true
+            shpIsScriptExecutionErrorDetected=true
         fi
     done
 
@@ -294,9 +296,10 @@ function shpClearEnvironment {
     unset SHP_INVALID_PROFILE
     unset SHP_INVALID_PROFILES
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
+    unset SHP_SCRIPT_EXECUTION_ERROR
     unset shpIsInformationMessagesDisplayed
     unset shpIsCommandStandardOutputDisplayed
-    unset shpIsCommandExecutionErrorDetected
+    unset shpIsScriptExecutionErrorDetected
     unset shpRequiredProfile
 }
 
@@ -392,9 +395,10 @@ function shpProcessShprofile {
     # Process profile
     shpProcessProfile
 
-    # Inform if error occured during command execution
-    if [ $shpIsCommandExecutionErrorDetected = 'true' ]; then
+    # Check if error occured during script execution
+    if [ $shpIsScriptExecutionErrorDetected = 'true' ]; then
         shpLog $SHP_ERROR "Error(s) occured during profile's scripts executions. Profile may not be initialized properly."
+        return $SHP_SCRIPT_EXECUTION_ERROR
     fi
 }
 
