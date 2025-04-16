@@ -44,8 +44,8 @@ SHP_SCRIPT_EXECUTION_ERROR=40
 
 # Options
 shpIsInformationMessagesDisplayed=true
-shpIsCommandStandardOutputDisplayed=true
-shpIsScriptExecutionErrorDetected=false
+shpIsProfileStandardOutputDisplayed=true
+shpIsProfileExecutionErrorDetected=false
 shpRequiredProfile=''
 
 #####################################################
@@ -105,8 +105,9 @@ function shpDisplayHelp {
     echo '      -l | --list                         Display the list of available profiles.'
     echo '      -u | --unload                       Unload the current enabled profile, if necessary.'
     echo '      -f | --forget                       Forget the current enabled profile, without unload it.'
-    echo '      -I | --no-informational-messages    Do not display informational messages.' 
-    echo "      -S | --no-command-stdout            Do not display command execution's standard output messages (but messages on standard error stream will still be displayed)."
+    echo "      -I | --no-informational-messages    Do not display ${SHP_APP}'s informational messages."
+    echo "      -S | --no-profile-stdout            Do not display standard output stream messages of the profile's scripts executions"
+    echo '                                          (but messages on standard error stream will still be displayed).'
     echo '      -h | --help                         Display this helper message.'
     echo '      -v | --version                      Display release information.'
 }
@@ -203,7 +204,7 @@ function shpExecuteScripts {
         # End with space to handle potentially bootstrap script's output/error messages
         shpDynamicLog "$message "
         # Execute the script with/without stdout needed
-        if [ $shpIsCommandStandardOutputDisplayed = 'false' ]; then
+        if [ $shpIsProfileStandardOutputDisplayed = 'false' ]; then
             source $scriptToExecute 1> /dev/null
         else
             source $scriptToExecute
@@ -211,7 +212,7 @@ function shpExecuteScripts {
         # Do not fail in case of script execution error (because scripts aren't dependent from each others),
         # but remember it to inform the user later
         if [ $? -ne 0 ]; then
-            shpIsScriptExecutionErrorDetected=true
+            shpIsProfileExecutionErrorDetected=true
         fi
     done
 
@@ -298,8 +299,8 @@ function shpClearEnvironment {
     unset SHP_INVALID_PROFILE_EXECUTION_TYPE
     unset SHP_SCRIPT_EXECUTION_ERROR
     unset shpIsInformationMessagesDisplayed
-    unset shpIsCommandStandardOutputDisplayed
-    unset shpIsScriptExecutionErrorDetected
+    unset shpIsProfileStandardOutputDisplayed
+    unset shpIsProfileExecutionErrorDetected
     unset shpRequiredProfile
 }
 
@@ -334,8 +335,8 @@ function shpParseOptions {
             -I|--no-informational-messages)
                 shpIsInformationMessagesDisplayed=false
                 ;;
-            -S|--no-command-stdout)
-                shpIsCommandStandardOutputDisplayed=false
+            -S|--no-profile-stdout)
+                shpIsProfileStandardOutputDisplayed=false
                 ;;
             -h|--help)
                 shpDisplayHelp
@@ -396,7 +397,7 @@ function shpProcessShprofile {
     shpProcessProfile
 
     # Check if error occured during script execution
-    if [ $shpIsScriptExecutionErrorDetected = 'true' ]; then
+    if [ $shpIsProfileExecutionErrorDetected = 'true' ]; then
         shpLog $SHP_ERROR "Error(s) occured during profile's scripts executions. Profile may not be initialized properly."
         return $SHP_SCRIPT_EXECUTION_ERROR
     fi
